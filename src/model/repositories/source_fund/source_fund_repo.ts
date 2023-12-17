@@ -10,7 +10,7 @@ export interface SourceFundRepository {
     deleteSourceFundInBatch(sourceFund:SourceFundType[]):Promise<boolean>
 }
 
-class SourceFundRepositoryImpl implements SourceFundRepository{
+export class SourceFundRepositoryImpl implements SourceFundRepository{
     private sourceFundModel:Model<SourceFundType>
     constructor(model:Model<SourceFundType>){
         this.sourceFundModel = model
@@ -26,7 +26,7 @@ class SourceFundRepositoryImpl implements SourceFundRepository{
             
             return true
 
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return false
         }
@@ -37,7 +37,7 @@ class SourceFundRepositoryImpl implements SourceFundRepository{
         try{
             return await this.sourceFundModel.findById(id)
 
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return null
         }
@@ -46,7 +46,7 @@ class SourceFundRepositoryImpl implements SourceFundRepository{
         try{
             return await this.sourceFundModel.find({"user._id":userId})
 
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return null
         }
@@ -56,7 +56,7 @@ class SourceFundRepositoryImpl implements SourceFundRepository{
             const deleteResult = await this.sourceFundModel.deleteOne({"user._id":userUuid})
             return deleteResult.acknowledged
 
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return false
         }
@@ -66,7 +66,7 @@ class SourceFundRepositoryImpl implements SourceFundRepository{
           await this.sourceFundModel.create(sourceFund)
           return true
 
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return false
         }
@@ -76,7 +76,7 @@ class SourceFundRepositoryImpl implements SourceFundRepository{
             await this.sourceFundModel.updateOne({_id:sourceFund._id},sourceFund)
             return true
   
-          }catch(e){
+          }catch(e:any){
               console.log(e)
               return false
           }

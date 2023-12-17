@@ -1,7 +1,7 @@
 import { Request,Response } from "express";
-import { SourceFundRepository } from "../../model/repositories/source_fund/source_fund_repo";
+import { SourceFundRepository } from "../../../model/repositories/source_fund/source_fund_repo";
 
-class SouceFundController{
+export class SourceFundController{
     sourceFundRepo:SourceFundRepository
     constructor(repo:SourceFundRepository){
         this.sourceFundRepo = repo

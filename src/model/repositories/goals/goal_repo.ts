@@ -12,7 +12,7 @@ export interface GoalRepository {
     deleteGoalsInBatch(goals: GoalType[]): Promise<boolean>
 }
 
-class GoalRepositoryImpl implements GoalRepository {
+export class GoalRepositoryImpl implements GoalRepository {
     goalModel: Model<GoalType>
     constructor(model: Model<GoalType>) {
         this.goalModel = model

@@ -19,9 +19,3 @@ describe("user test",()=>{
         expect(result.statusCode).toBe(201)    
     },30000)
 })
-describe("test",()=>{
-    it("should sum 1+1",()=>{
-        const result = 1+1
-        expect(result).toBe(2)
-    })
-})

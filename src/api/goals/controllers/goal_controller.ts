@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { GoalRepository } from "../../model/repositories/goals/goal_repo";
+import { GoalRepository } from "../../../model/repositories/goals/goal_repo";
 
-class GoalController {
+export class GoalController {
     goalRepo:GoalRepository
     constructor(repo:GoalRepository){
         this.goalRepo = repo
@@ -10,7 +10,7 @@ class GoalController {
         try{
             await this.goalRepo.addGoal(req.body)
             return res.sendStatus(201)
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.sendStatus(500)
         }
@@ -21,7 +21,7 @@ class GoalController {
             const goal = await this.goalRepo.getGoal(id)
             return res.status(200).json(goal)
             
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.sendStatus(500)
         }
@@ -32,18 +32,18 @@ class GoalController {
             const goals = await this.goalRepo.getGoals(id)
             return res.status(200).json(goals)
             
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.sendStatus(500)
         }
     }
-    async deleteGoals(req:Request,res:Response){
+    async deleteGoal(req:Request,res:Response){
         try{
             const {userId}=req.params
             await this.goalRepo.deleteGoal(userId)
             return res.sendStatus(200)
             
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.sendStatus(500)
         }
@@ -53,7 +53,7 @@ class GoalController {
             const goal = await this.goalRepo.updateGoal(req.body)
             return res.status(200).json(goal)
             
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.sendStatus(500)
         }
@@ -66,7 +66,7 @@ class GoalController {
                 return res.sendStatus(200)
             return res.sendStatus(500)
 
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.sendStatus(500)
         }

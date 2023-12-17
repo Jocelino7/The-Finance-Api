@@ -13,7 +13,7 @@ export interface CategoryRepository {
     deleteCategoriesInBatch(categories: CategoryType[]): Promise<boolean | null>
 }
 
-class CategoryRepositoryImpl implements CategoryRepository {
+export class CategoryRepositoryImpl implements CategoryRepository {
     categoryModel:Model<CategoryType>
     constructor(model:Model<CategoryType>){
         this.categoryModel = model

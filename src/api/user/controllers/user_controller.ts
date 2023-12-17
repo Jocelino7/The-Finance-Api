@@ -1,9 +1,8 @@
 import jsonwebtoken from "jsonwebtoken"
 import { NextFunction, Request, Response } from "express";
-import { UserRepository } from "../../model/repositories/user/user_repo";
-import { userYupSchema } from "../../model/schemas/user_schema";
-import { UserCredential } from "../../model/dtos/dto";
-import { userModel } from "../../model/mongo_models/mongoose_model";
+import { UserRepository } from "../../../model/repositories/user/user_repo";
+import { UserCredential } from "../../../model/dtos/dto";
+import { userYupSchema } from "../../../model/schemas/schema_validation_yup/schema_validation";
 
 export class UserController {
     private  secretAcessToken = process.env.SECRECT_ACESS_TOKEN!
@@ -19,8 +18,9 @@ export class UserController {
             await this.userRepo.deleteUser(id)
             return res.sendStatus(200)
         }
-        catch(e){
+        catch(e:any){
             console.log(e)
+            return res.sendStatus(500)
         }
     }
      async createUser(req: Request, res: Response) {
@@ -38,7 +38,7 @@ export class UserController {
             await this.userRepo.updateUser(req.body)
             return res.sendStatus(200)
         }
-        catch(e){
+        catch(e:any){
             console.error(e)
             return res.status(500)
         }
@@ -73,20 +73,7 @@ export class UserController {
             refresToken
         })
     }
-     async verifyToken(req: Request, res: Response, next: NextFunction) {
-        try {
-            const jwt = jsonwebtoken
-            const token = req.headers["authorization"]
-            const ACESS_TOKEN = process.env.ACCESS_TOKEN!
-            if (!token)
-                return res.sendStatus(401)
-            jwt.verify(token, ACESS_TOKEN)
-            next()
-        } catch (e) {
-            console.error(e)
-            return res.sendStatus(403)
-        }
-    }
+    
     private  generateToken(payload: UserCredential) {
         const jwt = jsonwebtoken
         return jwt.sign(payload, this.secretAcessToken, { expiresIn: "15m" })
@@ -112,7 +99,7 @@ export class UserController {
             }
         }
         catch (e) {
-            return res.sendStatus(404)
+            return res.sendStatus(403)
         }
 
     }

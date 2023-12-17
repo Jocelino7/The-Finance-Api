@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { TransationRepository } from "../../model/repositories/transaction/transaction_repo";
-import { transactionYupSchema } from "../../model/schemas/schema_validation_yup/schema_validation";
-import { internalServerError } from "../../utils/constants";
+import { TransationRepository } from "../../../model/repositories/transaction/transaction_repo";
+import { transactionYupSchema } from "../../../model/schemas/schema_validation_yup/schema_validation";
+import { internalServerError } from "../../../utils/constants";
 
-class Transactioncontroller{
+export class Transactioncontroller{
     transactionRepo:TransationRepository
     constructor(repo:TransationRepository){
         this.transactionRepo = repo
@@ -12,7 +12,7 @@ class Transactioncontroller{
         try{
             await this.transactionRepo.addTransaction(req.body)
             return res.sendStatus(201)
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.status(500).json({message:internalServerError})
         }
@@ -22,17 +22,17 @@ class Transactioncontroller{
             const {id} = req.params
             const transaction = await this.transactionRepo.getTransaction(id)
             return res.status(200).json(transaction)
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.status(500).json({message:internalServerError})
         }
     }
     async getTransactions(req:Request,res:Response){
         try{
-            const {id} = req.params
-            const transaction = await this.transactionRepo.getTransactions(id)
+            const {userId} = req.params
+            const transaction = await this.transactionRepo.getTransactions(userId)
             return res.status(200).json(transaction)
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.status(500).json({message:internalServerError})
         }
@@ -42,7 +42,7 @@ class Transactioncontroller{
         try{
             const transaction = await this.transactionRepo.getTransactionsFromSourceFund(req.body)
             return res.status(200).json(transaction)
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.status(500).json({message:internalServerError})
         }
@@ -53,7 +53,7 @@ class Transactioncontroller{
             const month = parseInt(req.params.month)
             const transaction = await this.transactionRepo.getAllTransactionFromMonth(month,req.body)
             return res.status(200).json(transaction)
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.status(500).json({message:internalServerError})
         }
@@ -63,7 +63,7 @@ class Transactioncontroller{
         try{
             await this.transactionRepo.updateTransaction(req.body)
             return res.status(200)
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.status(500).json({message:internalServerError})
         }
@@ -76,7 +76,7 @@ class Transactioncontroller{
             if(result)
                 return res.status(200)
             return res.status(500).json({message:"Error while deleting transaction"})
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.status(500).json({message:internalServerError})
         }
@@ -89,7 +89,7 @@ class Transactioncontroller{
             if(result)
                 return res.status(200)
             return res.status(500).json({message:"Error while deleting transaction"})
-        }catch(e){
+        }catch(e:any){
             console.log(e)
             return res.status(500).json({message:internalServerError})
         }

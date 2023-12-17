@@ -11,6 +11,7 @@ export interface TransationRepository {
     addTransaction(transaction: Transaction): Promise<boolean>
     updateTransaction(transaction: Transaction): Promise<boolean | null>,
     search(value: string, user: User): Promise<Transaction[] | null>
+    deleteTransactionInBatch(transactions:Transaction[]):Promise<boolean | null>
 }
 
 export class TransactionRepositoryImpl implements TransationRepository {
@@ -18,12 +19,24 @@ export class TransactionRepositoryImpl implements TransationRepository {
     constructor(model: Model<Transaction>) {
         this.transactionModel = model
     }
+    async deleteTransactionInBatch(transactions: Transaction[]): Promise<boolean | null> {
+        try {
+            const promises = transactions.map(async (transactionItem) => {
+                await this.transactionModel.deleteOne({ _id: transactionItem._id })
+            })
+            await Promise.all(promises)
+            return true
+        }
+        catch (e:any) {
+            throw new Error(e.message)
+        }
+    }
     async getTransaction(id: string): Promise<Transaction | null | undefined> {
         try {
             const transaction = await this.transactionModel.findOne({ _id: id })
             return transaction
 
-        } catch (e) {
+        } catch (e:any) {
             console.error(e)
             return null
         }
@@ -34,7 +47,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
             const transaction = await this.transactionModel.find({ "user._id": userId })
             return transaction
 
-        } catch (e) {
+        } catch (e:any) {
             console.error(e)
             return null
         }
@@ -44,7 +57,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
         try {
             const transaction = await this.transactionModel.find({ "sourceFund._id": sourceFund._id })
             return transaction
-        } catch (e) {
+        } catch (e:any) {
             console.error(e)
             return null
         }
@@ -53,7 +66,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
         try {
             const transaction = await this.transactionModel.find({ "transactionDate.month": month, "user.id": user._id })
             return transaction
-        } catch (e) {
+        } catch (e:any) {
             console.error(e)
             return null
         }
@@ -63,7 +76,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
         try {
             const deleteResult = await this.transactionModel.deleteOne({ _id: id })
             return deleteResult.acknowledged
-        } catch (e) {
+        } catch (e:any) {
             console.error(e)
             return null
         }
@@ -72,7 +85,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
         try {
             await this.transactionModel.create(transaction)
             return true
-        } catch (e) {
+        } catch (e:any) {
             console.error(e)
             return false
         }
@@ -81,7 +94,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
         try {
             await this.transactionModel.updateOne({ _id: transaction._id }, transaction)
             return true
-        } catch (e) {
+        } catch (e:any) {
             console.error(e)
             return false
         }
@@ -93,7 +106,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
                 $or: [{ amount: parseFloat(value) }, { description: { RegExp: value } }, { "category.name": { RegExp: value } }]
             })
             return searchResult
-        } catch (e) {
+        } catch (e:any) {
             console.error(e)
             return null
         }

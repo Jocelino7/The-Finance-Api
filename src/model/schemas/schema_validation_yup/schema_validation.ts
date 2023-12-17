@@ -1,6 +1,6 @@
 import *  as yup from "yup"
 import { CategoryType, GoalType, SourceFundType, Transaction, TransactionDate, User } from "../../dtos/dto"
-export const userYupSchema = new yup.ObjectSchema<User>({
+ const userYupSchema = new yup.ObjectSchema<User>({
     _id: yup.string().optional(),
     firstName: yup.string().required(),
     lastName: yup.string().required(),
@@ -8,7 +8,7 @@ export const userYupSchema = new yup.ObjectSchema<User>({
     password: yup.string().required().min(6).max(32),
     photoUrl: yup.string().optional()
 })
-const goalSchema = new yup.ObjectSchema<GoalType>({
+ const goalYupSchema = new yup.ObjectSchema<GoalType>({
     _id: yup.string().required(),
     user: userYupSchema,
     name: yup.string().required(),
@@ -17,22 +17,22 @@ const goalSchema = new yup.ObjectSchema<GoalType>({
     createdAt: yup.date().optional(),
     updatedAt: yup.date().optional()
 })
-export const sourceFundYupSchema = new yup.ObjectSchema<SourceFundType>({
+ const sourceFundYupSchema = new yup.ObjectSchema<SourceFundType>({
     _id: yup.string().required("Id was not provided"),
     user: userYupSchema,
     name: yup.string().required(),
     icon: yup.string().required(),
     createdAt: yup.date().optional(),
     updatedAt: yup.date().optional(),
-    goal:goalSchema
+    goal:goalYupSchema
 })
-export const transactionDateYupSchema = new yup.ObjectSchema<TransactionDate>({
+ const transactionDateYupSchema = new yup.ObjectSchema<TransactionDate>({
     month:yup.number().required(),
     year:yup.number().required(),
     day:yup.number().required()
 
 })
-export const categoryYupSchema = new yup.ObjectSchema<CategoryType>({
+ const categoryYupSchema = new yup.ObjectSchema<CategoryType>({
     _id: yup.string().required(),
     type: yup.string().required(),
     user: userYupSchema,
@@ -41,12 +41,12 @@ export const categoryYupSchema = new yup.ObjectSchema<CategoryType>({
     color: yup.string().required(),
 
 })
-export  const transactionYupSchema = new yup.ObjectSchema<Transaction>({
+const transactionYupSchema = new yup.ObjectSchema<Transaction>({
     _id: yup.string().required(),
     user: userYupSchema,
     transactionDate: transactionDateYupSchema,
     transactionType: yup.string().required(),
-    sourceFund: sourceFundSchema,
+    sourceFund: sourceFundYupSchema,
     category: categoryYupSchema,
     amount: yup.number().required(),
     week: yup.number().required(),
@@ -54,3 +54,4 @@ export  const transactionYupSchema = new yup.ObjectSchema<Transaction>({
     createdAt: yup.date().required(),
     updatedAt: yup.date().required(),
 })
+export {userYupSchema,transactionYupSchema,goalYupSchema,sourceFundYupSchema,categoryYupSchema}

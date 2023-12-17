@@ -6,7 +6,8 @@ export type Transaction = {
     sourceFund:SourceFundType,
     category:CategoryType,
     amount:number,
-    week:number
+    week:number,
+    description?:string | null,
     createdAt:Date,
     updatedAt?:Date
 }
