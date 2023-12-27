@@ -53,7 +53,10 @@ export class UserRepositoryImpl implements UserRepository {
     }
     async createUser(user: User): Promise<boolean> {
         try {
-            await this.model.create(user)
+            await this.model.create({
+                ...user,
+                password:encript(user.password)
+            })
             return true
 
         } catch (e) {
@@ -64,7 +67,7 @@ export class UserRepositoryImpl implements UserRepository {
     }
     async authUser(credential: UserCredential): Promise<boolean> {
         try {
-            const user = await this.model.findOne({ email: credential, password: encript(credential.password) })
+            const user = await this.model.findOne({ email: credential.email, password: encript(credential.password) })
             return user != null
 
         } catch (e) {

@@ -6,10 +6,10 @@ import { CategoryType, GoalType, SourceFundType, Transaction, TransactionDate, U
     lastName: yup.string().required(),
     email: yup.string().email().required(),
     password: yup.string().required().min(6).max(32),
-    photoUrl: yup.string().optional()
+    photoUrl: yup.string().optional().default(undefined)
 })
  const goalYupSchema = new yup.ObjectSchema<GoalType>({
-    _id: yup.string().required(),
+    _id: yup.string().optional().default(undefined),
     user: userYupSchema,
     name: yup.string().required(),
     description: yup.string().required(),
@@ -18,13 +18,13 @@ import { CategoryType, GoalType, SourceFundType, Transaction, TransactionDate, U
     updatedAt: yup.date().optional()
 })
  const sourceFundYupSchema = new yup.ObjectSchema<SourceFundType>({
-    _id: yup.string().required("Id was not provided"),
+    _id: yup.string().optional().default(undefined),
     user: userYupSchema,
     name: yup.string().required(),
     icon: yup.string().required(),
     createdAt: yup.date().optional(),
     updatedAt: yup.date().optional(),
-    goal:goalYupSchema
+    goal:goalYupSchema.optional().default(undefined)
 })
  const transactionDateYupSchema = new yup.ObjectSchema<TransactionDate>({
     month:yup.number().required(),
@@ -33,7 +33,7 @@ import { CategoryType, GoalType, SourceFundType, Transaction, TransactionDate, U
 
 })
  const categoryYupSchema = new yup.ObjectSchema<CategoryType>({
-    _id: yup.string().required(),
+    _id: yup.string().optional().default(undefined),
     type: yup.string().required(),
     user: userYupSchema,
     name: yup.string().required(),
@@ -42,16 +42,16 @@ import { CategoryType, GoalType, SourceFundType, Transaction, TransactionDate, U
 
 })
 const transactionYupSchema = new yup.ObjectSchema<Transaction>({
-    _id: yup.string().required(),
+    _id: yup.string().optional().default(undefined),
     user: userYupSchema,
     transactionDate: transactionDateYupSchema,
     transactionType: yup.string().required(),
     sourceFund: sourceFundYupSchema,
     category: categoryYupSchema,
     amount: yup.number().required(),
-    week: yup.number().required(),
     description: yup.string().optional(),
-    createdAt: yup.date().required(),
-    updatedAt: yup.date().required(),
+    createdAt: yup.date().notRequired(),
+    updatedAt: yup.date().notRequired(),
+    goal:goalYupSchema.optional().default(undefined)
 })
 export {userYupSchema,transactionYupSchema,goalYupSchema,sourceFundYupSchema,categoryYupSchema}

@@ -5,7 +5,7 @@ import { goalModel } from "../../../model/mongo_models/mongoose_model"
 import { GoalController } from "../controllers/goal_controller"
 import { GoalRepositoryImpl } from "../../../model/repositories/goals/goal_repo"
 import { validateGoalMdw } from "../validation_midleware/goal_validation_midleware"
-const baseUrl = "/t/f/transactions/"
+const baseUrl = "/t/f/goals/"
 const route = express.Router()
 const controller = new GoalController(new GoalRepositoryImpl(goalModel))
 route.post(

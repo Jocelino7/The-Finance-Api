@@ -1,14 +1,21 @@
 import { NextFunction,Request,Response} from "express"
 import { categoryYupSchema } from "../../../model/schemas/schema_validation_yup/schema_validation"
+import { ValidationError } from "yup"
+import { internalServerError } from "../../../utils/constants"
 
-export function validateCategoryMdw(req:Request,res:Response,next:NextFunction){
+export async function validateCategoryMdw(req:Request,res:Response,next:NextFunction){
     const schema = categoryYupSchema
     try {
         const category = req.body
-        schema.validate(category)
+        await schema.validate(category)
         next()
     }
     catch(e:any){
-        res.status(400).send(e.erros[0])
+        if(e instanceof ValidationError){
+            res.status(400).json({
+                message:internalServerError
+            })
+        }
+        next(e)
     }
 }

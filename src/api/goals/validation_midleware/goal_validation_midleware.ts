@@ -1,14 +1,21 @@
 import { NextFunction,Request,Response} from "express"
-import { goalYupSchema, sourceFundYupSchema } from "../../../model/schemas/schema_validation_yup/schema_validation"
+import { goalYupSchema } from "../../../model/schemas/schema_validation_yup/schema_validation"
+import { ValidationError } from "yup"
 
-export function validateGoalMdw(req:Request,res:Response,next:NextFunction){
+
+export async function validateGoalMdw(req:Request,res:Response,next:NextFunction){
     const schema = goalYupSchema
     try {
         const goal = req.body
-        schema.validate(goal)
+        await schema.validate(goal)
         next()
     }
     catch(e:any){
-        res.status(400).send(e.erros[0])
+        if(e instanceof ValidationError){
+            res.status(400).json({
+                message:e.errors[0]
+            })
+        }
+        next(e)
     }
 }

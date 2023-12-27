@@ -1,23 +1,31 @@
 import { Model } from "mongoose"
-import { SourceFundType, Transaction, User } from "../../dtos/dto"
+import { ReportType, SourceFundType, Transaction, User } from "../../dtos/dto"
+import { generateReport } from "../../../utils/helpers"
 
 
 export interface TransationRepository {
     getTransaction(id: string): Promise<Transaction | null | undefined>
     getTransactions(userId: string): Promise<Transaction[] | null>
     getTransactionsFromSourceFund(sourceFund: SourceFundType): Promise<Transaction[] | null>
-    getAllTransactionFromMonth(month: number, user: User): Promise<Transaction[] | null>
+    getAllTransactionFromMonth(month: number, userId: string): Promise<Transaction[] | null>
+    getReport(userId: string, month: number): Promise<ReportType | null>,
     deleteTransaction(id: string): Promise<boolean | null>
     addTransaction(transaction: Transaction): Promise<boolean>
     updateTransaction(transaction: Transaction): Promise<boolean | null>,
     search(value: string, user: User): Promise<Transaction[] | null>
-    deleteTransactionInBatch(transactions:Transaction[]):Promise<boolean | null>
+    deleteTransactionInBatch(transactions: Transaction[]): Promise<boolean | null>
 }
 
 export class TransactionRepositoryImpl implements TransationRepository {
     private transactionModel: Model<Transaction>
     constructor(model: Model<Transaction>) {
         this.transactionModel = model
+    }
+    async getReport(userId: string, month: number): Promise<ReportType | null> {
+        const monthTransaction = await this.getAllTransactionFromMonth(month, userId)
+        if (monthTransaction)
+            return generateReport(monthTransaction)
+        return null
     }
     async deleteTransactionInBatch(transactions: Transaction[]): Promise<boolean | null> {
         try {
@@ -27,7 +35,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
             await Promise.all(promises)
             return true
         }
-        catch (e:any) {
+        catch (e: any) {
             throw new Error(e.message)
         }
     }
@@ -36,7 +44,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
             const transaction = await this.transactionModel.findOne({ _id: id })
             return transaction
 
-        } catch (e:any) {
+        } catch (e: any) {
             console.error(e)
             return null
         }
@@ -47,7 +55,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
             const transaction = await this.transactionModel.find({ "user._id": userId })
             return transaction
 
-        } catch (e:any) {
+        } catch (e: any) {
             console.error(e)
             return null
         }
@@ -57,16 +65,17 @@ export class TransactionRepositoryImpl implements TransationRepository {
         try {
             const transaction = await this.transactionModel.find({ "sourceFund._id": sourceFund._id })
             return transaction
-        } catch (e:any) {
+        } catch (e: any) {
             console.error(e)
             return null
         }
     }
-    async getAllTransactionFromMonth(month: number, user: User): Promise<Transaction[] | null> {
+    async getAllTransactionFromMonth(month: number, userId: string): Promise<Transaction[] | null> {
         try {
-            const transaction = await this.transactionModel.find({ "transactionDate.month": month, "user.id": user._id })
+            const transaction = await this.transactionModel.find({ "transactionDate.month": month, "user._id": userId})
+            console.log("tranaction -result "+transaction)
             return transaction
-        } catch (e:any) {
+        } catch (e: any) {
             console.error(e)
             return null
         }
@@ -76,7 +85,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
         try {
             const deleteResult = await this.transactionModel.deleteOne({ _id: id })
             return deleteResult.acknowledged
-        } catch (e:any) {
+        } catch (e: any) {
             console.error(e)
             return null
         }
@@ -85,7 +94,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
         try {
             await this.transactionModel.create(transaction)
             return true
-        } catch (e:any) {
+        } catch (e: any) {
             console.error(e)
             return false
         }
@@ -94,7 +103,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
         try {
             await this.transactionModel.updateOne({ _id: transaction._id }, transaction)
             return true
-        } catch (e:any) {
+        } catch (e: any) {
             console.error(e)
             return false
         }
@@ -106,7 +115,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
                 $or: [{ amount: parseFloat(value) }, { description: { RegExp: value } }, { "category.name": { RegExp: value } }]
             })
             return searchResult
-        } catch (e:any) {
+        } catch (e: any) {
             console.error(e)
             return null
         }

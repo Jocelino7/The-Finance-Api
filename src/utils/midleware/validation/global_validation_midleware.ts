@@ -17,7 +17,7 @@ export async function  verifyToken(req: Request, res: Response, next: NextFuncti
     try {
         const jwt = jsonwebtoken
         const token = req.headers["authorization"]
-        const ACESS_TOKEN = process.env.ACCESS_TOKEN!
+        const ACESS_TOKEN = process.env.ACESS_TOKEN_SECRET!
         if (!token)
             return res.sendStatus(401)
         jwt.verify(token, ACESS_TOKEN)

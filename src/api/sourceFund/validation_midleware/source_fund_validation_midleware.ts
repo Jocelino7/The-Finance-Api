@@ -1,14 +1,21 @@
 import { NextFunction,Request,Response} from "express"
 import { sourceFundYupSchema } from "../../../model/schemas/schema_validation_yup/schema_validation"
+import { ValidationError } from "yup"
+import { internalServerError } from "../../../utils/constants"
 
-export function validateSourceFundMdw(req:Request,res:Response,next:NextFunction){
+export async function validateSourceFundMdw(req:Request,res:Response,next:NextFunction){
     const schema = sourceFundYupSchema
     try {
         const sourceFund = req.body
-        schema.validate(sourceFund)
+        await schema.validate(sourceFund)
         next()
     }
     catch(e:any){
-        res.status(400).send(e.erros[0])
+        if(e instanceof ValidationError){
+            res.status(400).json({
+                message:internalServerError
+            })
+        }
+        next(e)
     }
 }

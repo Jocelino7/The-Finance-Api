@@ -1,12 +1,11 @@
 import jsonwebtoken from "jsonwebtoken"
 import { NextFunction, Request, Response } from "express";
 import { UserRepository } from "../../../model/repositories/user/user_repo";
-import { UserCredential } from "../../../model/dtos/dto";
 import { userYupSchema } from "../../../model/schemas/schema_validation_yup/schema_validation";
+import { generateToken, generateteRefreshToken } from "../../../utils/helpers";
 
 export class UserController {
-    private  secretAcessToken = process.env.SECRECT_ACESS_TOKEN!
-    private  secretRefreshToken = process.env.REFRESH_TOKEN!
+    private  secretRefreshToken = process.env.REFRESH_TOKKEN_SECRET!
     private userRepo:UserRepository
     constructor(repo: UserRepository) {
         console.log(repo)
@@ -62,29 +61,20 @@ export class UserController {
         next()
     }
      async auth(req: Request, res: Response) {
+       
         const user = await this.userRepo.authUser(req.body)
         if (!user)
             return res.sendStatus(401)
         const userPayLoad = req.body
-        const token = this.generateToken(userPayLoad)
-        const refresToken = this.generateteRefreshToken(userPayLoad)
+        const token = generateToken(userPayLoad)
+        const refreshToken = generateteRefreshToken(userPayLoad)
         res.status(200).json({
             token,
-            refresToken
+            refreshToken
         })
     }
     
-    private  generateToken(payload: UserCredential) {
-        const jwt = jsonwebtoken
-        return jwt.sign(payload, this.secretAcessToken, { expiresIn: "15m" })
-
-    }
-    private  generateteRefreshToken(payload: UserCredential) {
-        const jwt = jsonwebtoken
-        const monthInSeconds = 30 * 24 * 60 * 60
-        const month = Math.floor(Date.now() / 1000) + monthInSeconds
-        return jwt.sign(payload, this.secretRefreshToken, { expiresIn: month })
-    }
+   
      async refreshToken(req: Request, res: Response) {
         try {
             const jwt = jsonwebtoken
@@ -92,11 +82,11 @@ export class UserController {
             if(!refreshToken)
                 return res.sendStatus(401)
             jwt.verify(refreshToken, this.secretRefreshToken)
-            const token = this.generateToken(req.body)
-            return {
+            const token = generateToken(req.body)
+            return res.status(200).json({
                 token,
                 refreshToken
-            }
+            })
         }
         catch (e) {
             return res.sendStatus(403)

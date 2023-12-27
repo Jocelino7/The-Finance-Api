@@ -16,6 +16,5 @@ export const transactionSchema = new mongoose.Schema<Transaction>({
     sourceFund: { type: sourceFundSchema, required: true },
     category: { type: categorySchema },
     amount: { type: Number, required: true },
-    week: { type: Number, required: false },
     description:String,
 }, { timestamps: true })
