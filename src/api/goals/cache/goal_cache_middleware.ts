@@ -22,7 +22,7 @@ export async function goalCacheMiddleware(req: Request, res: Response, next: Nex
         }
 
     }
-    if (url.startsWith(`${baseUrl}get`)) {
+    if (url.startsWith(`${baseUrl}get/`)) {
         try {
             const cacheKey = `goals-${req.params.id}`
             const goalCache = await cache.get(cacheKey)
@@ -37,8 +37,4 @@ export async function goalCacheMiddleware(req: Request, res: Response, next: Nex
         }
 
     }
-    
-
-
-
 }

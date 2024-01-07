@@ -1,13 +1,13 @@
 import { CategoryType } from "../model/dtos/dto";
 import { generateObjectID } from "../utils/helpers";
-import { userMocks } from "./user.mock";
+
 
 export const categorymocks: CategoryType[] = [
     {
         _id: generateObjectID(),
         type: "income",
         name: "fake-category",
-        user: userMocks[0],
+        userId:generateObjectID(),
         icon: "category_icon",
         color: "red"
     },
@@ -15,7 +15,7 @@ export const categorymocks: CategoryType[] = [
         _id: generateObjectID(),
         type: "income",
         name: "fake-category-2",
-        user: userMocks[1],
+        userId:generateObjectID(),
         icon: "category_icon",
         color: "red"
     },
@@ -23,7 +23,7 @@ export const categorymocks: CategoryType[] = [
         _id: generateObjectID(),
         type: "income",
         name: "fake-category-3",
-        user: userMocks[2],
+        userId:generateObjectID(),
         icon: "category_icon",
         color: "red"
     },
@@ -31,7 +31,7 @@ export const categorymocks: CategoryType[] = [
         _id: generateObjectID(),
         type: "income",
         name: "fake-category-4",
-        user: userMocks[3],
+        userId:generateObjectID(),
         icon: "category_icon",
         color: "red"
     },
@@ -39,7 +39,7 @@ export const categorymocks: CategoryType[] = [
         _id: generateObjectID(),
         type: "income",
         name: "fake-category-5",
-        user: userMocks[4],
+        userId:generateObjectID(),
         icon: "category_icon",
         color: "red"
     },
@@ -47,7 +47,7 @@ export const categorymocks: CategoryType[] = [
         _id: generateObjectID(),
         type: "income",
         name: "fake-category-6",
-        user: userMocks[5],
+        userId:generateObjectID(),
         icon: "category_icon",
         color: "red"
     },
@@ -55,7 +55,7 @@ export const categorymocks: CategoryType[] = [
         _id: generateObjectID(),
         type: "income",
         name: "fake-category-7",
-        user: userMocks[6],
+        userId:generateObjectID(),
         icon: "category_icon",
         color: "red"
     },
@@ -63,7 +63,7 @@ export const categorymocks: CategoryType[] = [
         _id: generateObjectID(),
         type: "income",
         name: "fake-category-8",
-        user: userMocks[7],
+        userId:generateObjectID(),
         icon: "category_icon",
         color: "red"
     },
@@ -71,7 +71,7 @@ export const categorymocks: CategoryType[] = [
         _id: generateObjectID(),
         type: "income",
         name: "fake-category-9",
-        user: userMocks[8],
+        userId:generateObjectID(),
         icon: "category_icon",
         color: "red"
     },
@@ -79,7 +79,7 @@ export const categorymocks: CategoryType[] = [
         _id: generateObjectID(),
         type: "income",
         name: "fake-category-10",
-        user: userMocks[9],
+        userId:generateObjectID(),
         icon: "category_icon",
         color: "red"
     },
@@ -87,7 +87,7 @@ export const categorymocks: CategoryType[] = [
         _id: generateObjectID(),
         type: "income",
         name: "fake-category-11",
-        user: userMocks[10],
+        userId:generateObjectID(),
         icon: "category_icon",
         color: "red"
     }

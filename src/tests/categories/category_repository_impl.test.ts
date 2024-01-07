@@ -16,17 +16,17 @@ test("categoryRepositoryImplTest", async () => {
     await repoImpl.addCategory(categorymocks[0])
     await repoImpl.deleteCategoriesInBatch(categorymocks)
     await repoImpl.updateCategory(categorymocks[0])
-    await repoImpl.getCategories(categorymocks[0].user._id!)
+    await repoImpl.getCategories(categorymocks[0].userId!)
     await repoImpl.getCategory(categorymocks[0]._id!)
-    await repoImpl.search("test", categorymocks[0].user._id!)
+    await repoImpl.search("test", categorymocks[0].userId!)
     const deleteResult = await repoImpl.deleteCategory(categorymocks[0]._id!)
 
     expect(categoryModel.find).toHaveBeenCalledWith({
-        "user._id": categorymocks[0].user._id
+        "userId": categorymocks[0].userId
     })
     expect(categoryModel.find).toHaveBeenCalledWith(
         {
-            "user._id": categorymocks[0].user._id, $or: [
+            "userId": categorymocks[0].userId, $or: [
                 {
                     name: { "$regex": new RegExp("test", "i") }
                 }

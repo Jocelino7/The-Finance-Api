@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 import { User } from "../dtos/dto";
 
 
@@ -7,6 +7,7 @@ export const userSchema = new mongoose.Schema<User>({
     lastName: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    photoUrl: String
+    photoUrl: String,
+    isEmailVerified:{type:Boolean, required:false}
 })
 

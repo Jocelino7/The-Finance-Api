@@ -74,11 +74,11 @@ describe("sourceFund tests", () => {
         const fakeToken = generateFakeToken()
         await addSourceFund(fakeSourcefund, req)
         //get sourceFunds added    
-        const result = await req.get(`${baseUrl}getAll/${fakeSourcefund!.user._id}`)
+        const result = await req.get(`${baseUrl}getAll/${fakeSourcefund!.userId}`)
             .set("authorization", fakeToken)
         expect(result.body.length).toBe(1)
         expect(result.body[0].name).toBe(fakeSourcefund.name)
-        expect(result.body[0].user._id).toBe(fakeSourcefund.user._id)
+        expect(result.body[0].userId).toBe(fakeSourcefund.userId)
     }, 30000)
     it("given an userid and a query(q) should return an array of sourceFund that matches the query and belongs to the user", async () => {
         //add sourceFund
@@ -90,10 +90,10 @@ describe("sourceFund tests", () => {
         await addSourceFund(fakeSourcefund, req)
         //get sourceFunds added    
 
-        const result = await req.get(`${baseUrl}getAll/${fakeSourcefund.user._id}?q=test`)
+        const result = await req.get(`${baseUrl}getAll/${fakeSourcefund.userId}?q=test`)
             .set("authorization", fakeToken)
         expect(result.body[0].name).toBe(fakeSourcefund.name)
-        expect(result.body[0].user._id).toBe(fakeSourcefund.user._id)
+        expect(result.body[0].userId).toBe(fakeSourcefund.userId)
         expect(result.body.length).toBeGreaterThan(0)
 
     }, 30000),

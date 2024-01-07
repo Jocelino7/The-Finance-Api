@@ -20,7 +20,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
     }
     async getSpendCategories(userId: string): Promise<CategoryType[]> {
         try {
-            const categories = await this.categoryModel.find({ "user._id": userId, type: "spends" })
+            const categories = await this.categoryModel.find({ "userId": userId, type: "spends" })
             return categories
         }
         catch (e: any) {
@@ -30,7 +30,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
     }
     async getIncomeCategories(userId: string): Promise<CategoryType[]> {
         try {
-            const categories = await this.categoryModel.find({ "user._id": userId, type: "incomes" })
+            const categories = await this.categoryModel.find({ "userId": userId, type: "incomes" })
             return categories
         }
         catch (e: any) {
@@ -51,7 +51,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
     }
     async getCategories(userId: string): Promise<CategoryType[]> {
         try {
-            const categories = await this.categoryModel.find({ "user._id": userId })
+            const categories = await this.categoryModel.find({ "userId": userId })
             return categories
         }
         catch (e: any) {
@@ -93,7 +93,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
         const regex = new RegExp(value, "i")
         try {
             const categories = await this.categoryModel.find({
-                "user._id": userId, $or: [
+                "userId": userId, $or: [
                     {
                         name: { "$regex": regex }
                     }

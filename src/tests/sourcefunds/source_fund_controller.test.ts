@@ -7,7 +7,7 @@ import { DeleteResult, fakeCacheMock, fakeRequest, fakeResponse, testMocks } fro
 function fakeReq() {
     const mock = sourceFundMocks[0]
     return fakeRequest({
-        userId: mock.user._id,
+        userId: mock.userId,
         id: mock._id
     }, mock)
 }
@@ -30,7 +30,7 @@ describe("transaction controller test", () => {
         model.find = jest.fn().mockResolvedValue(sourceFundMocks)
         const fakeController = new SourceFundController(fakeRepo, fakeCache)
         await fakeController.getSourceFunds(req, res)
-        expect(fakeCache.set).toHaveBeenCalledWith(`source_funds-${mock.user._id}`, JSON.stringify(sourceFundMocks))
+        expect(fakeCache.set).toHaveBeenCalledWith(`source_funds-${mock.userId}`, JSON.stringify(sourceFundMocks))
     })
     it("should add sourceFund to cache after retrieve it", async () => {
         model.findOne = jest.fn().mockResolvedValue(mock)
@@ -45,7 +45,7 @@ describe("transaction controller test", () => {
         const fakeController = new SourceFundController(fakeRepo, fakeCache)
         await fakeController.deleSourceFund(req, res)
         expect(fakeCache.remove).toHaveBeenCalledWith(`source_funds-${mock._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`source_funds-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`source_funds-${mock.userId}`)
     })
     it("should remove each sourceFund from cache when deleting in batch", async () => {
         const mocks = sourceFundMocks
@@ -61,7 +61,7 @@ describe("transaction controller test", () => {
         await fakeController.deleteSourceFundInBatch(req, res)
         expect(fakeCache.remove).toHaveBeenCalledTimes(sourceFundMocks.length)
         expect(fakeCache.remove).toHaveBeenLastCalledWith(`source_funds-${lastSourceFund._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`source_funds-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`source_funds-${mock.userId}`)
     })
     it("should remove sourceFunds from cache after updated", async () => {
         req = fakeRequest({
@@ -72,7 +72,7 @@ describe("transaction controller test", () => {
         const fakeController = new SourceFundController(fakeRepo, fakeCache)
         await fakeController.updateSourceFund(req, res)
         expect(fakeCache.remove).toHaveBeenCalledWith(`source_funds-${mock._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`source_funds-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`source_funds-${mock.userId}`)
 
     })
 

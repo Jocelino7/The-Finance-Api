@@ -1,21 +1,22 @@
 export type Transaction = {
     _id?: string | undefined | null,
-    user: User,
+    userId: string,
     transactionDate: TransactionDate,
     transactionType: string,
     sourceFund: SourceFundType,
     category: CategoryType,
     amount: number,
-    goal?:GoalType | undefined | null,
+    goal?: GoalType | undefined | null,
     description?: string | null,
     createdAt?: Date | null | undefined,
     updatedAt?: Date | null | undefined
 }
 export type SourceFundType = {
     _id?: string | undefined | null,
-    user: User,
+    userId: string,
     name: string,
     icon: string,
+    code: string,
     createdAt?: Date,
     updatedAt?: Date,
     goal?: GoalType | undefined | null
@@ -23,14 +24,14 @@ export type SourceFundType = {
 export type CategoryType = {
     _id?: string | undefined | null,
     type: string,
-    user: User,
+    userId: string,
     name: string,
     icon: string,
-    color: string
+    color?: string | undefined | null
 }
 export type GoalType = {
     _id?: string | undefined | null,
-    user: User,
+    userId: string,
     name: string,
     description: string,
     finalBalance: number,
@@ -43,7 +44,7 @@ export type User = {
     firstName: string,
     lastName: string,
     photoUrl?: string | null | undefined,
-    isEmailVerified?:boolean | null | undefined,
+    isEmailVerified?: boolean | null | undefined,
     password: string
 }
 export type UserCredential = {
@@ -59,7 +60,9 @@ export type UserType = {
 export type TransactionDate = {
     month: number,
     day: number,
-    year: number
+    year: number,
+    hour: number,
+    minutes: number
 }
 export type DateType = {
     day: number,
@@ -90,4 +93,20 @@ export type ReportType = {
         total: number
     }
     total: number
+}
+export type Currency = {
+    code: string,
+    name: string,
+    symbol: string,
+}
+export type CurrencyRate = {
+    success: boolean,
+    source: string,
+    rate: Record<string, any>
+}
+export type DefaultCurrency ={
+    code:string,
+    name:string,
+    symbol:string,
+    userId?:string | null | undefined
 }

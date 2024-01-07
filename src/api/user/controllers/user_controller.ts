@@ -66,22 +66,23 @@ export class UserController {
     async auth(req: Request, res: Response) {
         const user = await this.userRepo.authUser(req.body)
         if (!user)
-            return res.sendStatus(401)
+            return res.status(401).json({ message: "unauthorized" })
         const userPayLoad = req.body
         const token = generateToken(userPayLoad)
         const refreshToken = generateteRefreshToken(userPayLoad)
         res.status(200).json({
             token,
-            refreshToken
+            refreshToken,
+            user
         })
     }
 
     async refreshToken(req: Request, res: Response) {
         try {
 
-            const refreshToken = req.headers["authorization"]
+            const { refreshToken } = req.params
             if (!refreshToken)
-                return res.sendStatus(401)
+                return res.status(401)
             this.jwt.verify(refreshToken, this.secretRefreshToken)
             const token = generateToken(req.body)
             return res.status(200).json({

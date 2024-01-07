@@ -22,7 +22,7 @@ export async function sourceFundCacheMiddleware(req: Request, res: Response, nex
         }
 
     }
-    if (url.startsWith(`${baseUrl}get`)) {
+    if (url.startsWith(`${baseUrl}get/`)) {
         try {
             const cacheKey = `sourceFunds-${req.params.id}`
             const sourceFundCache = await cache.get(cacheKey)

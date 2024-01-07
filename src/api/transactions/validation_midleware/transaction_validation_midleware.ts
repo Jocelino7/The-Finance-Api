@@ -11,7 +11,7 @@ export async function validateTransaction(req:Request,res:Response,next:NextFunc
     catch(e:any){
         console.error(e)
         if(e instanceof ValidationError){
-            res.status(400).json({
+            return res.status(400).json({
                 message:e.errors[0]
             })
         }

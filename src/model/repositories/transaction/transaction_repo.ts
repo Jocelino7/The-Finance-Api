@@ -22,7 +22,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
         this.transactionModel = model
     }
     async getReport(userId: string, month: number,year:number): Promise<ReportType | null> {
-        const monthTransaction = await this.transactionModel.find({ "transactionDate.year": year,"transactionDate.month": month, "user._id": userId })
+        const monthTransaction:Transaction[] | null = await this.transactionModel.find({ "transactionDate.year": year,"transactionDate.month": month, "userId": userId })
         if (monthTransaction)
             return generateReport(monthTransaction)
         return null
@@ -52,7 +52,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
     }
     async getTransactions(userId: string): Promise<Transaction[] | null> {
         try {
-            const transaction = await this.transactionModel.find({ "user._id": userId })
+            const transaction = await this.transactionModel.find({ "userId": userId })
             return transaction
 
         } catch (e: any) {
@@ -72,7 +72,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
     }
     async getAllTransactionFromMonth(month: number, userId: string): Promise<Transaction[] | null> {
         try {
-            const transaction = await this.transactionModel.find({ "transactionDate.month": month, "user._id": userId })
+            const transaction = await this.transactionModel.find({ "transactionDate.month": month, "userId": userId })
             return transaction
         } catch (e: any) {
             console.error(e)
@@ -111,7 +111,7 @@ export class TransactionRepositoryImpl implements TransationRepository {
         try {
             const regex = new RegExp(value,"i")
             const searchResult = await this.transactionModel.find({
-                "user._id": userId,
+                "userId": userId,
                 $or: [{ "sourceFund.name": { "$regex":regex } }, { "description": { "$regex":regex }  }, { "category.name": { "$regex":regex } }]
             })
             return searchResult

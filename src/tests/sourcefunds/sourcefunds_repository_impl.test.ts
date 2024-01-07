@@ -18,17 +18,17 @@ test("categoryRepositoryImplTest", async () => {
     await repoImpl.addSourceFund(sourceFundMocks[0])
     await repoImpl.deleteSourceFundInBatch(sourceFundMocks)
     await repoImpl.updateSourceFund(sourceFundMocks[0])
-    await repoImpl.getSourceFunds(sourceFundMocks[0].user._id!)
+    await repoImpl.getSourceFunds(sourceFundMocks[0].userId!)
     await repoImpl.getSourceFund(sourceFundMocks[0]._id!)
-    await repoImpl.search("test", sourceFundMocks[0].user._id!)
+    await repoImpl.search("test", sourceFundMocks[0].userId!)
     const deleteResult = await repoImpl.deleteSourceFund(sourceFundMocks[0]._id!)
 
     expect(sourceFundModel.find).toHaveBeenCalledWith({
-        "user._id": sourceFundMocks[0].user._id
+        "userId": sourceFundMocks[0].userId
     })
     expect(sourceFundModel.find).toHaveBeenCalledWith(
         {
-            "user._id": sourceFundMocks[0].user._id, $or: [{
+            "userId": sourceFundMocks[0].userId, $or: [{
                 name: { "$regex": regexp("test") },
             }]
         })

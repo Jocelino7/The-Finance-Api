@@ -8,7 +8,7 @@ import { DeleteResult, fakeCacheMock, fakeRequest, fakeResponse, testMocks } fro
 function fakeReq() {
     const mock = transactionMocks[0]
     return fakeRequest({
-        userId: mock.user._id,
+        userId: mock.userId,
         id: mock._id
     }, mock)
 }
@@ -30,7 +30,7 @@ describe("transaction controller test", () => {
         model.find = jest.fn().mockResolvedValue(transactionMocks)
         const fakeController = new Transactioncontroller(fakeRepo, fakeCache)
         await fakeController.getTransactions(req, res)
-        expect(fakeCache.set).toHaveBeenCalledWith(`transactions-${mock.user._id}`, JSON.stringify(transactionMocks))
+        expect(fakeCache.set).toHaveBeenCalledWith(`transactions-${mock.userId}`, JSON.stringify(transactionMocks))
     })
     it("should add transactions to cache after retrieve it", async () => {
         model.findOne = jest.fn().mockResolvedValue(mock)
@@ -41,7 +41,7 @@ describe("transaction controller test", () => {
     it("should add report to cache after retrieve it", async () => {
         req = fakeRequest(
             {
-                userId: mock.user._id,
+                userId: mock.userId,
                 month: 4,
                 year: 2023
             },
@@ -71,16 +71,16 @@ describe("transaction controller test", () => {
         model.find = jest.fn().mockResolvedValue(transactionMocks)
         const fakeController = new Transactioncontroller(fakeRepo, fakeCache)
         await fakeController.getReport(req, res)
-        expect(fakeCache.set).toHaveBeenCalledWith(`report-${4}-${2023}-${mock.user._id}`, JSON.stringify(fakeReport))
+        expect(fakeCache.set).toHaveBeenCalledWith(`report-${4}-${2023}-${mock.userId}`, JSON.stringify(fakeReport))
     })
     it("should remove transactions from cache after delete one transaction", async () => {
         model.deleteOne = jest.fn().mockResolvedValue(DeleteResult)
         model.findOne = jest.fn().mockResolvedValue(mock)
         const fakeController = new Transactioncontroller(fakeRepo, fakeCache)
         await fakeController.deleteTransaction(req, res)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`report-${mock.transactionDate.month}-${mock.transactionDate.year}-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`report-${mock.transactionDate.month}-${mock.transactionDate.year}-${mock.userId}`)
         expect(fakeCache.remove).toHaveBeenCalledWith(`transactions-${mock._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`transactions-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`transactions-${mock.userId}`)
     })
     it("should remove any report from cache for each month of a transaction", async () => {
         const mocks = transactionMocks
@@ -95,9 +95,9 @@ describe("transaction controller test", () => {
         const fakeController = new Transactioncontroller(fakeRepo, fakeCache)
         await fakeController.deleteTransactionBatch(req, res)
         expect(fakeCache.remove).toHaveBeenCalledTimes((transactionMocks.length*2)+1)
-        expect(fakeCache.remove).toHaveBeenNthCalledWith(1,`report-${mock.transactionDate.month}-${mock.transactionDate.year}-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenNthCalledWith(1,`report-${mock.transactionDate.month}-${mock.transactionDate.year}-${mock.userId}`)
         expect(fakeCache.remove).toHaveBeenLastCalledWith(`transactions-${lastTransaction._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`transactions-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`transactions-${mock.userId}`)
     })
     it("should remove transactions from cache after updated", async () => {
         req = fakeRequest({
@@ -108,7 +108,7 @@ describe("transaction controller test", () => {
         const fakeController = new Transactioncontroller(fakeRepo, fakeCache)
         await fakeController.updateTransaction(req, res)
         expect(fakeCache.remove).toHaveBeenCalledWith(`transactions-${mock._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`transactions-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`transactions-${mock.userId}`)
 
     })
 

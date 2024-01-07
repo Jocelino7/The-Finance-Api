@@ -1,5 +1,5 @@
 export const  transactionBaseUrl="/t/f/transactions/"
 export const goalBaseUrl ="/t/f/goals/"
 export const categoryBaseUrl = "/t/f/categories/"
-export const sourceFundBaseUrl = "/t/f/source_funds/"
+export const sourceFundBaseUrl = "/t/f/sourcefunds/"
 export const userBaserUrl ="/t/f/auth/"

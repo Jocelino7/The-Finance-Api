@@ -10,7 +10,7 @@ describe("categories middleware test", () => {
     let next = fakeNextFunction()
     const fakeCache = fakeCacheMock()
     let req = fakeRequest(
-        { userId: mock.user._id },
+        { userId: mock.userId },
         {},
         {},
         `${categoryBaseUrl}getAll`

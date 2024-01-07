@@ -12,7 +12,7 @@ export async function validateSourceFundMdw(req:Request,res:Response,next:NextFu
     }
     catch(e:any){
         if(e instanceof ValidationError){
-            res.status(400).json({
+            return res.status(400).json({
                 message:internalServerError
             })
         }

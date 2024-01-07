@@ -75,11 +75,11 @@ describe("goal tests", () => {
         const fakeToken = generateFakeToken()
         await addGoal(fakeGoal, req)
         //get goals added    
-        const result = await req.get(`${baseUrl}getAll/${fakeGoal!.user._id}`)
+        const result = await req.get(`${baseUrl}getAll/${fakeGoal!.userId}`)
             .set("authorization", fakeToken)
         expect(result.body.length).toBe(1)
         expect(result.body[0].name).toBe(fakeGoal.name)
-        expect(result.body[0].user._id).toBe(fakeGoal.user._id)
+        expect(result.body[0].userId).toBe(fakeGoal.userId)
     }, 30000)
     it("given an userid and a query(q) should return an array of goal that matches the query and belongs to the user", async () => {
         //add goal
@@ -91,10 +91,10 @@ describe("goal tests", () => {
         await addGoal(fakeGoal, req)
         //get goals added    
 
-        const result = await req.get(`${baseUrl}getAll/${fakeGoal.user._id}?q=test`)
+        const result = await req.get(`${baseUrl}getAll/${fakeGoal.userId}?q=test`)
             .set("authorization", fakeToken)
         expect(result.body[0].name).toBe(fakeGoal.name)
-        expect(result.body[0].user._id).toBe(fakeGoal.user._id)
+        expect(result.body[0].userId).toBe(fakeGoal.userId)
         expect(result.body.length).toBeGreaterThan(0)
 
     }, 30000),
@@ -104,7 +104,7 @@ describe("goal tests", () => {
             const fakeToken = generateFakeToken()
             await addGoal(fakeGoal, req)
             //delete goal
-            const deleteResult = await req.delete(`${baseUrl}delete/${fakeGoal!.user._id}`)
+            const deleteResult = await req.delete(`${baseUrl}delete/${fakeGoal!.userId}`)
                 .set("authorization", fakeToken)
 
             expect(deleteResult.status).toBe(200)

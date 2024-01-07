@@ -10,7 +10,7 @@ describe("transaction middleware test", () => {
     let next = fakeNextFunction()
     const fakeCache = fakeCacheMock()
     let req = fakeRequest(
-        { userId: mock.user._id },
+        { userId: mock.userId },
         {},
         {},
         `${transactionBaseUrl}getAll`
@@ -29,7 +29,7 @@ describe("transaction middleware test", () => {
     it("when url is <report> should verify if there´s transactions in cache, return transactions from cache if exist, or call next function if it doesn´t",
         async () => {
             req = fakeRequest({
-                userId: mock.user._id,
+                userId: mock.userId,
                 month: 1,
                 year: 2023
             },
@@ -40,7 +40,7 @@ describe("transaction middleware test", () => {
             await transactionCacheMiddleware(req, res, next, fakeCache)
 
             expect(res.status).toHaveBeenCalledWith(200)
-            expect(fakeCache.get).toHaveBeenCalledWith(`report-${mock.transactionDate.day}-${mock.transactionDate.year}-${mock.user._id}`)
+            expect(fakeCache.get).toHaveBeenCalledWith(`report-${mock.transactionDate.day}-${mock.transactionDate.year}-${mock.userId}`)
         })
     it("when url is <get> should verify if there´s transactions in cache, return transactions from cache if exist, or call next function if it doesn´t",
         async () => {

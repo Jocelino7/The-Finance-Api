@@ -74,11 +74,11 @@ describe("transaction tests", () => {
         const fakeToken = generateFakeToken()
         await addTransaction(fakeTransaction, req)
         //get transactions added    
-        const result = await req.get(`${baseUrl}getAll/${fakeTransaction!.user._id}`)
+        const result = await req.get(`${baseUrl}getAll/${fakeTransaction!.userId}`)
             .set("authorization", fakeToken)
         expect(result.body.length).toBe(1)
         expect(result.body[0].amount).toBe(fakeTransaction.amount)
-        expect(result.body[0].user._id).toBe(fakeTransaction.user._id)
+        expect(result.body[0].userId).toBe(fakeTransaction.userId)
     }, 30000)
     it("given an userid and a query(q) should return an array of transaction that matches the query and belongs to the user", async () => {
         //add transaction
@@ -93,11 +93,11 @@ describe("transaction tests", () => {
         const fakeToken = generateFakeToken()
         await addTransaction(fakeTransaction, req)
         //get transactions added    
-        console.log("id " +fakeTransaction!.user._id)
-        const result = await req.get(`${baseUrl}getAll/${fakeTransaction.user._id}?q=test`)
+        console.log("id " +fakeTransaction!.userId)
+        const result = await req.get(`${baseUrl}getAll/${fakeTransaction.userId}?q=test`)
             .set("authorization", fakeToken)
             expect(result.body[0].amount).toBe(fakeTransaction.amount)
-            expect(result.body[0].user._id).toBe(fakeTransaction.user._id)   
+            expect(result.body[0].userId).toBe(fakeTransaction.userId)   
         expect(result.body.length).toBeGreaterThan(0)
       
     }, 30000),
@@ -151,7 +151,7 @@ describe("transaction tests", () => {
         //add transactions
         await addTransaction(fakeTransaction, req)
         //get report
-        const result = await req.get(`${baseUrl}report/${fakeTransaction.user._id}/4/${fakeTransaction.transactionDate.year}`)
+        const result = await req.get(`${baseUrl}report/${fakeTransaction.userId}/4/${fakeTransaction.transactionDate.year}`)
             .set("authorization", fakeToken)
         expect(result.status).toBe(200)
         expect(result.body).not.toBeNull()

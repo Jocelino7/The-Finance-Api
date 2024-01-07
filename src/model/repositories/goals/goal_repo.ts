@@ -40,7 +40,7 @@ export class GoalRepositoryImpl implements GoalRepository {
     }
     async getGoals(userId: string): Promise<GoalType[] | null> {
         try {
-            const goal = await this.goalModel.find({ "user._id": userId })
+            const goal = await this.goalModel.find({ "userId": userId })
             return goal
         }
         catch (e: any) {
@@ -82,7 +82,7 @@ export class GoalRepositoryImpl implements GoalRepository {
         try {
             const regex = new RegExp(value, "i")
             const goals = await this.goalModel.find({
-                "user._id": userId, $or: [{
+                "userId": userId, $or: [{
                     name: { "$regex": regex },
                     description: { "$regex": regex }
                 }]

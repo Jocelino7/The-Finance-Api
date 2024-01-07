@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express"
 import { NextFunction } from "connect"
-import { validateId, validateUserId, verifyToken } from "../../../utils/midleware/validation/global_validation_midleware"
+import { verifyToken } from "../../../utils/midleware/validation/global_validation_midleware"
 import { validateMonthAndYear, validateTransaction } from "../validation_midleware/transaction_validation_midleware"
 import { Transactioncontroller } from "../controllers/transaction_controller"
 import { transactionModel } from "../../../model/mongo_models/mongoose_model"
@@ -20,40 +20,36 @@ route.post(
 )
 route.put(
     `${baseUrl}update`,
-    (req: Request, res: Response, next: NextFunction) => verifyToken(req, res, next),
-    (req: Request, res: Response, next: NextFunction) => validateTransaction(req, res, next),
+    verifyToken,
+    validateTransaction,
     (req: Request, res: Response) => controller.updateTransaction(req, res)
 )
 route.get(
     `${baseUrl}get/:id`,
-    (req: Request, res: Response, next: NextFunction) => verifyToken(req, res, next),
-    (req: Request, res: Response, next: NextFunction) => validateId(req, res, next),
-    (req: Request, res: Response, next: NextFunction) => transactionCacheMiddleware(req,res,next,cache),
+    verifyToken,
+    (req: Request, res: Response, next: NextFunction) => transactionCacheMiddleware(req, res, next, cache),
     (req: Request, res: Response) => controller.getTransaction(req, res)
 )
 route.get(
     `${baseUrl}getAll/:userId`,
-    (req: Request, res: Response, next: NextFunction) => validateUserId(req, res, next),
-    (req: Request, res: Response, next: NextFunction) => verifyToken(req, res, next),
-    (req: Request, res: Response, next: NextFunction) => transactionCacheMiddleware(req,res,next,cache),
+    verifyToken,
+    (req: Request, res: Response, next: NextFunction) => transactionCacheMiddleware(req, res, next, cache),
     (req: Request, res: Response) => controller.getTransactions(req, res)
 )
 route.get(
     `${baseUrl}report/:userId/:month/:year`,
-    (req: Request, res: Response, next: NextFunction) => verifyToken(req, res, next),
-    (req: Request, res: Response, next: NextFunction) => validateUserId(req, res, next),
-    (req: Request, res: Response, next: NextFunction) => validateMonthAndYear(req, res, next),
-    (req: Request, res: Response, next: NextFunction) => transactionCacheMiddleware(req,res,next,cache),
+    verifyToken,
+    validateMonthAndYear,
+    (req: Request, res: Response, next: NextFunction) => transactionCacheMiddleware(req, res, next, cache),
     (req: Request, res: Response) => controller.getReport(req, res)
 )
 route.delete(
-    `${baseUrl}delete/:id`,
-    (req: Request, res: Response, next: NextFunction) => validateId(req, res, next), (req: Request, res: Response, next: NextFunction) => verifyToken(req, res, next),
+    `${baseUrl}delete/:id`, verifyToken,
     (req: Request, res: Response) => controller.deleteTransaction(req, res)
 )
 route.delete(
     `${baseUrl}delete_batch/`,
-    (req: Request, res: Response, next: NextFunction) => verifyToken(req, res, next),
+    verifyToken,
     (req: Request, res: Response) => controller.deleteTransactionBatch(req, res)
 )
 export default route

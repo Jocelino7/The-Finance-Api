@@ -7,7 +7,7 @@ import { DeleteResult, fakeCacheMock, fakeRequest, fakeResponse, testMocks } fro
 function fakeReq() {
     const mock = categorymocks[0]
     return fakeRequest({
-        userId: mock.user._id,
+        userId: mock.userId,
         id: mock._id
     }, mock)
 }
@@ -29,7 +29,7 @@ describe("transaction controller test", () => {
         model.find = jest.fn().mockResolvedValue(categorymocks)
         const fakeController = new CategoryController(fakeRepo, fakeCache)
         await fakeController.getCategories(req, res)
-        expect(fakeCache.set).toHaveBeenCalledWith(`categories-${mock.user._id}`, JSON.stringify(categorymocks))
+        expect(fakeCache.set).toHaveBeenCalledWith(`categories-${mock.userId}`, JSON.stringify(categorymocks))
     })
     it("should add category to cache after retrieve it", async () => {
         model.findOne = jest.fn().mockResolvedValue(mock)
@@ -44,7 +44,7 @@ describe("transaction controller test", () => {
         const fakeController = new CategoryController(fakeRepo, fakeCache)
         await fakeController.deleteCategory(req, res)
         expect(fakeCache.remove).toHaveBeenCalledWith(`categories-${mock._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`categories-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`categories-${mock.userId}`)
     })
     it("should remove each category from cache when deleting in batch", async () => {
         const mocks = categorymocks
@@ -60,7 +60,7 @@ describe("transaction controller test", () => {
         await fakeController.deleteCategoryInBatch(req, res)
         expect(fakeCache.remove).toHaveBeenCalledTimes(categorymocks.length)
         expect(fakeCache.remove).toHaveBeenLastCalledWith(`categories-${lastCategory._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`categories-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`categories-${mock.userId}`)
     })
     it("should remove categories from cache after updated", async () => {
         req = fakeRequest({
@@ -71,7 +71,7 @@ describe("transaction controller test", () => {
         const fakeController = new CategoryController(fakeRepo, fakeCache)
         await fakeController.updateCategory(req, res)
         expect(fakeCache.remove).toHaveBeenCalledWith(`categories-${mock._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`categories-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`categories-${mock.userId}`)
 
     })
 

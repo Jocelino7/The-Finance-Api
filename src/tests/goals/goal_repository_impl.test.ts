@@ -18,17 +18,17 @@ test("categoryRepositoryImplTest", async () => {
     await repoImpl.addGoal(goalMocks[0])
     await repoImpl.deleteGoalsInBatch(goalMocks)
     await repoImpl.updateGoal(goalMocks[0])
-    await repoImpl.getGoals(goalMocks[0].user._id!)
+    await repoImpl.getGoals(goalMocks[0].userId!)
     await repoImpl.getGoal(goalMocks[0]._id!)
-    await repoImpl.search("test", goalMocks[0].user._id!)
+    await repoImpl.search("test", goalMocks[0].userId!)
     const deleteResult = await repoImpl.deleteGoal(goalMocks[0]._id!)
 
     expect(goalModel.find).toHaveBeenCalledWith({
-        "user._id": goalMocks[0].user._id
+        "userId": goalMocks[0].userId
     })
     expect(goalModel.find).toHaveBeenCalledWith(
         {
-            "user._id": goalMocks[0].user._id, $or: [{
+            "userId": goalMocks[0].userId, $or: [{
                 name: { "$regex": regexp("test") },
                 description: { "$regex": regexp("test") }
             }]

@@ -66,7 +66,7 @@ export function generateReport(transaction: Transaction[]): ReportType {
     })
     total = totalWeek1 + totalWeek2 + totalWeek3 + totalWeek4
     return {
-        month: transaction[0].transactionDate.month,
+        month: transaction[0]?.transactionDate.month,
         week1: {
             transaction: week1,
             total: totalWeek1
@@ -88,13 +88,13 @@ export function generateReport(transaction: Transaction[]): ReportType {
 }
 
 
-export function generateToken(payload: {[key:string]:any},expiresIn:string="15m") {
+export function generateToken(payload: {[key:string]:any},expiresIn:string="1440m") {
     const  secretAcessToken = process.env.ACCESS_TOKEN_SECRET
     const jwt = jsonwebtoken
     return jwt.sign(payload, secretAcessToken!, { expiresIn})
 }
 export function  generateteRefreshToken(payload: UserCredential) {
-    const  secretRefreshToken = process.env.REFRESH_TOKKEN_SECRET!
+    const  secretRefreshToken = process.env.REFRESH_TOKEN_SECRET!
     const jwt = jsonwebtoken
     const monthInSeconds = 30 * 24 * 60 * 60
     const month = Math.floor(Date.now() / 1000) + monthInSeconds

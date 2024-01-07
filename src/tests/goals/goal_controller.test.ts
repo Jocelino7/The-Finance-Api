@@ -7,7 +7,7 @@ import { DeleteResult, fakeCacheMock, fakeRequest, fakeResponse, testMocks } fro
 function fakeReq() {
     const mock = goalMocks[0]
     return fakeRequest({
-        userId: mock.user._id,
+        userId: mock.userId,
         id: mock._id
     }, mock)
 }
@@ -29,7 +29,7 @@ describe("transaction controller test", () => {
         model.find = jest.fn().mockResolvedValue(goalMocks)
         const fakeController = new GoalController(fakeRepo, fakeCache)
         await fakeController.getGoals(req, res)
-        expect(fakeCache.set).toHaveBeenCalledWith(`goals-${mock.user._id}`, JSON.stringify(goalMocks))
+        expect(fakeCache.set).toHaveBeenCalledWith(`goals-${mock.userId}`, JSON.stringify(goalMocks))
     })
     it("should add goal to cache after retrieve it", async () => {
         model.findOne = jest.fn().mockResolvedValue(mock)
@@ -44,7 +44,7 @@ describe("transaction controller test", () => {
         const fakeController = new GoalController(fakeRepo, fakeCache)
         await fakeController.deleteGoal(req, res)
         expect(fakeCache.remove).toHaveBeenCalledWith(`goals-${mock._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`goals-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`goals-${mock.userId}`)
     })
     it("should remove each goal from cache when deleting in batch", async () => {
         const mocks = goalMocks
@@ -60,7 +60,7 @@ describe("transaction controller test", () => {
         await fakeController.deleteGoalInBatch(req, res)
         expect(fakeCache.remove).toHaveBeenCalledTimes(goalMocks.length)
         expect(fakeCache.remove).toHaveBeenLastCalledWith(`goals-${lastgoal._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`goals-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`goals-${mock.userId}`)
     })
     it("should remove goals from cache after updated", async () => {
         req = fakeRequest({
@@ -71,7 +71,7 @@ describe("transaction controller test", () => {
         const fakeController = new GoalController(fakeRepo, fakeCache)
         await fakeController.updateGoal(req, res)
         expect(fakeCache.remove).toHaveBeenCalledWith(`goals-${mock._id}`)
-        expect(fakeCache.remove).toHaveBeenCalledWith(`goals-${mock.user._id}`)
+        expect(fakeCache.remove).toHaveBeenCalledWith(`goals-${mock.userId}`)
 
     })
 

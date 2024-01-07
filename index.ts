@@ -7,13 +7,14 @@ import goalRoute from "./src/api/goals/routes/goal_route"
 import transactionRoute from "./src/api/transactions/routes/transaction_route"
 import sourceFundRoute from "./src/api/sourceFund/routes/source_fund_router"
 import categoryRoute from "./src/api/category/routes/category_route"
+import CurrenyRouter from "./src/api/currency/currency_route"
 import { internalServerError } from "./src/utils/constants"
 import { connectToRedis } from "./src/config/redis_config"
 const app = express()
 connectToRedis()
 app.use((e:Error,req:Request,res:Response,next:NextFunction)=>{
     console.error(e.stack)
-    res.status(500).json({
+    return res.status(500).json({
         messgae:internalServerError
     })
 
@@ -25,4 +26,5 @@ app.use(goalRoute)
 app.use(transactionRoute)
 app.use(sourceFundRoute)
 app.use(categoryRoute)
+app.use(CurrenyRouter)
 export {app}

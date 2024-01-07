@@ -12,7 +12,7 @@ export interface UserRepository {
     isEmailVerified(): Promise<true>
     reload(): Promise<void>
     createUser(user: User): Promise<boolean>
-    authUser(credential: UserCredential): Promise<boolean>
+    authUser(credential: UserCredential): Promise<User | null>
 }
 
 export class UserRepositoryImpl implements UserRepository {
@@ -72,14 +72,14 @@ export class UserRepositoryImpl implements UserRepository {
         }
 
     }
-    async authUser(credential: UserCredential): Promise<boolean> {
+    async authUser(credential: UserCredential): Promise<User|null> {
         try {
             const user = await this.model.findOne({ email: credential.email, password: encript(credential.password) })
-            return user != null
+            return user
 
         } catch (e) {
             console.error(e)
-            return false
+            return null
         }
     }
 

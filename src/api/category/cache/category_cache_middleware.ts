@@ -22,7 +22,7 @@ export async function categoryCacheMiddleware(req: Request, res: Response, next:
         }
 
     }
-    if (url.startsWith(`${baseUrl}get`)) {
+    if (url.startsWith(`${baseUrl}get/`)) {
         try {
             const cacheKey = `categories-${req.params.id}`
             const categoryCache = await cache.get(cacheKey)

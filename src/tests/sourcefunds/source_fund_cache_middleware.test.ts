@@ -11,7 +11,7 @@ describe("sourceFunds middleware test", () => {
     let next = fakeNextFunction()
     const fakeCache = fakeCacheMock()
     let req = fakeRequest(
-        { userId: mock.user._id },
+        { userId: mock.userId },
         {},
         {},
         `${sourceFundBaseUrl}getAll`

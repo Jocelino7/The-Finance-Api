@@ -10,7 +10,9 @@ export class CacheImpl implements CacheInterface {
         }
     }
     async get(key: string): Promise<any> {
-        return await redis.get(key)
+        const cache =false
+        if(cache)
+            return await redis.get(key)
     }
     async remove(key: string): Promise<any> {
         try {

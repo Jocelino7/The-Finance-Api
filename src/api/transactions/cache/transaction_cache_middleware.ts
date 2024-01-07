@@ -6,7 +6,8 @@ export async function transactionCacheMiddleware(req: Request, res: Response, ne
     const baseUrl = transactionBaseUrl
     const url = req.url
     const { month, year, userId } = req.params
-    if (url.startsWith(`${baseUrl}report`)) {
+    if (url.startsWith(`${baseUrl}report/`)) {
+        
         try {
            
             const cacheKey = `report-${month}-${year}-${userId}`
@@ -24,6 +25,7 @@ export async function transactionCacheMiddleware(req: Request, res: Response, ne
     }
     if (url.startsWith(`${baseUrl}getAll`)) {
        
+       
         try {
             
             const cacheKey = `transactions-${req.params.userId}`
@@ -39,7 +41,8 @@ export async function transactionCacheMiddleware(req: Request, res: Response, ne
         }
 
     }
-    if (url.startsWith(`${baseUrl}get`)) {
+    if (url.startsWith(`${baseUrl}get/`)) {
+        console.log("fluxo")
         try {
             const cacheKey = `transactions-${req.params.id}`
             const transactionCache = await cache.get(cacheKey)

@@ -20,7 +20,7 @@ export class SourceFundRepositoryImpl implements SourceFundRepository{
         const regex = new RegExp(value,"i")
         try{
             const sourceFunds = await this.sourceFundModel.find({
-                "user._id":userId,
+                "userId":userId,
                 $or:
                    [{ 
                     name:{
@@ -66,7 +66,7 @@ export class SourceFundRepositoryImpl implements SourceFundRepository{
     }
     async getSourceFunds(userId: string): Promise<SourceFundType[] | null> {
         try{
-            return await this.sourceFundModel.find({"user._id":userId})
+            return await this.sourceFundModel.find({"userId":userId})
 
         }catch(e:any){
             console.log(e)

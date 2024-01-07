@@ -7,13 +7,13 @@ import { userMocks } from "./user.mock";
 export const transactionMocks: Transaction[] = [
   {
     _id: generateObjectID(),
-    user: userMocks[0],
+    userId: generateObjectID(),
     amount: 100,
     category: {
       _id: generateObjectID(),
       type: "spends",
       name: "drinks",
-      user: userMocks[0],
+      userId: generateObjectID(),
       icon: "category_icon",
       color: "red"
     },
@@ -24,13 +24,13 @@ export const transactionMocks: Transaction[] = [
   },
   {
     _id: generateObjectID(),
-    user: userMocks[1],
+    userId: generateObjectID(),
     amount: 100,
     category: {
       _id: generateObjectID(),
       type: "incomes",
       name: "business",
-      user: userMocks[1],
+      userId: generateObjectID(),
       icon: "category_icon",
       color: "blue"
     },
@@ -41,13 +41,13 @@ export const transactionMocks: Transaction[] = [
   },
   {
     _id: generateObjectID(),
-    user: userMocks[2],
+    userId: generateObjectID(),
     amount: 100,
     category: {
       _id: generateObjectID(),
       type: "spends",
       name: "food",
-      user: userMocks[2],
+      userId: generateObjectID(),
       icon: "category_icon",
       color: "green"
     },
@@ -58,13 +58,13 @@ export const transactionMocks: Transaction[] = [
   },
   {
     _id:generateObjectID(),
-    user: userMocks[3],
+    userId: generateObjectID(),
     amount: 100,
     category: {
       _id: generateObjectID(),
       type: "incomes",
       name: "salary",
-      user: userMocks[3],
+      userId: generateObjectID(),
       icon: "category_icon",
       color: "purple"
     },
@@ -75,13 +75,13 @@ export const transactionMocks: Transaction[] = [
   },
   {
     _id: generateObjectID(),
-    user: userMocks[4],
+    userId: generateObjectID(),
     amount: 100,
     category: {
       _id: generateObjectID(),
       type: "spends",
       name: "shopping",
-      user: userMocks[4],
+      userId: generateObjectID(),
       icon: "category_icon",
       color: "orange"
     },
@@ -92,13 +92,13 @@ export const transactionMocks: Transaction[] = [
   },
   {
     _id: generateObjectID(),
-    user: userMocks[5],
+    userId: generateObjectID(),
     amount: 100,
     category: {
       _id: generateObjectID(),
       type: "incomes",
       name: "freelance",
-      user: userMocks[5],
+      userId: generateObjectID(),
       icon: "category_icon",
       color: "yellow"
     },
@@ -109,13 +109,13 @@ export const transactionMocks: Transaction[] = [
   },
   {
     _id: generateObjectID(),
-    user: userMocks[6],
+    userId: generateObjectID(),
     amount: 100,
     category: {
       _id: generateObjectID(),
       type: "spends",
       name: "entertainment",
-      user: userMocks[6],
+      userId: generateObjectID(),
       icon: "category_icon",
       color: "pink"
     },
@@ -126,13 +126,13 @@ export const transactionMocks: Transaction[] = [
   },
   {
     _id: generateObjectID(),
-    user: userMocks[7],
+    userId: generateObjectID(),
     amount: 100,
     category: {
       _id: generateObjectID(),
       type: "incomes",
       name: "investment",
-      user: userMocks[7],
+      userId: generateObjectID(),
       icon: "category_icon",
       color: "brown"
     },
@@ -143,13 +143,13 @@ export const transactionMocks: Transaction[] = [
   },
   {
     _id: generateObjectID(),
-    user: userMocks[8],
+    userId: generateObjectID(),
     amount: 100,
     category: {
       _id: generateObjectID(),
       type: "spends",
       name: "travel",
-      user: userMocks[8],
+      userId: generateObjectID(),
       icon: "category_icon",
       color: "cyan"
     },
@@ -160,13 +160,13 @@ export const transactionMocks: Transaction[] = [
   },
   {
     _id: generateObjectID(),
-    user: userMocks[9],
+    userId: generateObjectID(),
     amount: 100,
     category: {
       _id: generateObjectID(),
       type: "incomes",
       name: "bonus",
-      user: userMocks[9],
+      userId: generateObjectID(),
       icon: "category_icon",
       color: "indigo"
     },

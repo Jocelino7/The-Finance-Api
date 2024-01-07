@@ -18,17 +18,17 @@ test("categoryRepositoryImplTest", async () => {
     await repoImpl.addTransaction(transactionMocks[0])
     await repoImpl.deleteTransactionInBatch(transactionMocks)
     await repoImpl.updateTransaction(transactionMocks[0])
-    await repoImpl.getTransactions(transactionMocks[0].user._id!)
+    await repoImpl.getTransactions(transactionMocks[0].userId!)
     await repoImpl.getTransaction(transactionMocks[0]._id!)
-    await repoImpl.search("test", transactionMocks[0].user._id!)
+    await repoImpl.search("test", transactionMocks[0].userId!)
     const deleteResult = await repoImpl.deleteTransaction(transactionMocks[0]._id!)
 
     expect(transactionModel.find).toHaveBeenCalledWith({
-        "user._id": transactionMocks[0].user._id
+        "userId": transactionMocks[0].userId
     })
     expect(transactionModel.find).toHaveBeenCalledWith(
         {
-            "user._id": transactionMocks[0].user._id, $or: [{ "sourceFund.name": { "$regex":regexp("test") } }, { "description": { "$regex":regexp("test") }  }, { "category.name": { "$regex":regexp("test") } }]
+            "userId": transactionMocks[0].userId, $or: [{ "sourceFund.name": { "$regex":regexp("test") } }, { "description": { "$regex":regexp("test") }  }, { "category.name": { "$regex":regexp("test") } }]
         })
     expect(transactionModel.findOne).toHaveBeenCalledWith({
         "_id": transactionMocks[0]._id

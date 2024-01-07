@@ -73,12 +73,12 @@ describe("category tests", () => {
         const fakeToken = generateFakeToken()
         await addCategory(fakeCategory, req)
         //get categories added    
-        const result = await req.get(`${baseUrl}getAll/${fakeCategory!.user._id}`)
+        const result = await req.get(`${baseUrl}getAll/${fakeCategory!.userId}`)
             .set("authorization", fakeToken)
             console.log("all +",JSON.stringify(result))
         expect(result.body.length).toBe(1)
         expect(result.body[0].name).toBe(fakeCategory.name)
-        expect(result.body[0].user._id).toBe(fakeCategory.user._id)
+        expect(result.body[0].userId).toBe(fakeCategory.userId)
     }, 30000)
     it("given an userId and a query(q) should return an array of category that matches the query and belongs to the user", async () => {
         //add category
@@ -89,11 +89,11 @@ describe("category tests", () => {
         const fakeToken = generateFakeToken()
         await addCategory(fakeCategory, req)
         //get categories added
-        const result = await req.get(`${baseUrl}getAll/${fakeCategory.user._id}?q=test`)
+        const result = await req.get(`${baseUrl}getAll/${fakeCategory.userId}?q=test`)
             .set("authorization", fakeToken)
             console.log("wuery +",JSON.stringify(result))
         expect(result.body[0].name).toBe(fakeCategory.name)
-        expect(result.body[0].user._id).toBe(fakeCategory.user._id)
+        expect(result.body[0].userId).toBe(fakeCategory.userId)
         expect(result.body.length).toBeGreaterThan(0)
 
     }, 30000),
