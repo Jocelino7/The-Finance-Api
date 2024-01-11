@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CacheImpl } from "../../../cache/cache";
 import { transactionBaseUrl } from "../../../base_urls/base_urls";
+import { redis } from "../../../config/redis_config";
 
 export async function transactionCacheMiddleware(req: Request, res: Response, next: NextFunction, cache: CacheImpl) {
     const baseUrl = transactionBaseUrl
@@ -13,7 +14,8 @@ export async function transactionCacheMiddleware(req: Request, res: Response, ne
             const cacheKey = `report-${month}-${year}-${userId}`
             const cacheReport = await cache.get(cacheKey)
             if (cacheReport) {
-                return res.status(200).json(cacheReport)
+                const parsedReport = JSON.parse(cacheReport)
+                return res.status(200).json(parsedReport)
             }
             next()
 
@@ -25,13 +27,13 @@ export async function transactionCacheMiddleware(req: Request, res: Response, ne
     }
     if (url.startsWith(`${baseUrl}getAll`)) {
        
-       
         try {
             
             const cacheKey = `transactions-${req.params.userId}`
             const transactionsCache = await cache.get(cacheKey)
             if (transactionsCache) {
-                return res.status(200).json(transactionsCache)
+                const parsedTransactions = JSON.parse(transactionsCache)
+                return res.status(200).json(parsedTransactions)
             }
             next()
 
@@ -47,7 +49,8 @@ export async function transactionCacheMiddleware(req: Request, res: Response, ne
             const cacheKey = `transactions-${req.params.id}`
             const transactionCache = await cache.get(cacheKey)
             if (transactionCache) {
-                return res.status(200).json(transactionCache)
+                const parsedTransaction =JSON.parse(transactionCache)
+                return res.status(200).json(parsedTransaction)
             }
             next()
 

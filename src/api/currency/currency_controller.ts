@@ -2,7 +2,7 @@ import { Axios } from "axios";
 import { Request, Response } from "express";
 import { currencies, currenciesQuery } from "../../defaults/defaults";
 import { CacheInterface } from "../interfaces/cache_interface";
-import { CurrencyRate} from "../../model/dtos/dto";
+import { CurrencyRate } from "../../model/dtos/dto";
 import { internalServerError } from "../../utils/constants";
 import { CurrencyRepository } from "../../model/repositories/currency/currency_repo";
 
@@ -39,14 +39,14 @@ export class CurrencyController {
             res.status(500).json({ message: internalServerError })
         }
     }
-    async getDefaultCurrency(req:Request,res:Response){
-        try{
-            const {userId} = req.params
+    async getDefaultCurrency(req: Request, res: Response) {
+        try {
+            const { userId } = req.params
             const currency = await this.currencyRepo.getDefaultCurrency(userId)
             res.status(200).json(currency)
-        }catch(e:any){
+        } catch (e: any) {
             console.log(e)
-            res.status(500).json({message:internalServerError})
+            res.status(500).json({ message: internalServerError })
 
         }
     }
@@ -56,8 +56,6 @@ export class CurrencyController {
         try {
             const rate = await this.fetcher.get(`${this.baseUrl}?access_key=${this.accessKey}&currencies=${currenciesQuery}&source=${source}&format=1`)
             const data = rate.data
-            const jsonData = JSON.stringify(data)
-            await this.cache.set("rate", jsonData)
             const quotes = data.quotes
             const rateResponse: CurrencyRate = {
                 success: data.success,
@@ -77,6 +75,8 @@ export class CurrencyController {
                     NGN: quotes[`${source}NGN`],
                 }
             }
+            const jsonData = JSON.stringify(rateResponse)
+            await this.cache.set("rates", jsonData)
             res.status(200).json(rateResponse)
         } catch (e: any) {
             console.error(e)

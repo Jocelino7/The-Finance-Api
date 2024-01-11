@@ -12,7 +12,8 @@ export async function sourceFundCacheMiddleware(req: Request, res: Response, nex
             const cacheKey = `sourceFunds-${req.params.userId}`
             const sourceFundsCache = await cache.get(cacheKey)
             if (sourceFundsCache) {
-                return res.status(200).json(sourceFundsCache)
+                const parsedSourceFundsCache = JSON.parse(sourceFundsCache)
+                return res.status(200).json(parsedSourceFundsCache)
             }
             next()
 
@@ -27,7 +28,8 @@ export async function sourceFundCacheMiddleware(req: Request, res: Response, nex
             const cacheKey = `sourceFunds-${req.params.id}`
             const sourceFundCache = await cache.get(cacheKey)
             if (sourceFundCache) {
-                return res.status(200).json(sourceFundCache)
+                const parsedSourceFund = JSON.parse(sourceFundCache)
+                return res.status(200).json(parsedSourceFund)
             }
             next()
 

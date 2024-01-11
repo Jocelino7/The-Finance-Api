@@ -12,7 +12,8 @@ export async function goalCacheMiddleware(req: Request, res: Response, next: Nex
             const cacheKey = `goals-${req.params.userId}`
             const goalsCache = await cache.get(cacheKey)
             if (goalsCache) {
-                return res.status(200).json(goalsCache)
+                const parsedGoals = JSON.parse(goalsCache)
+                return res.status(200).json(parsedGoals)
             }
             next()
 
@@ -27,7 +28,8 @@ export async function goalCacheMiddleware(req: Request, res: Response, next: Nex
             const cacheKey = `goals-${req.params.id}`
             const goalCache = await cache.get(cacheKey)
             if (goalCache) {
-                return res.status(200).json(goalCache)
+                const parsedGoal = JSON.parse(goalCache)
+                return res.status(200).json(parsedGoal)
             }
             next()
 

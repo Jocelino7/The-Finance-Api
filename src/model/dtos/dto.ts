@@ -102,7 +102,7 @@ export type Currency = {
 export type CurrencyRate = {
     success: boolean,
     source: string,
-    rate: Record<string, any>
+    rate: Record<string, any|undefined>
 }
 export type DefaultCurrency ={
     code:string,

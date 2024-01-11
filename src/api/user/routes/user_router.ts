@@ -1,4 +1,6 @@
 import express, { Response, Request, NextFunction } from "express"
+import  path from "path"
+import multer from "multer"
 import { UserController } from "../controllers/user_controller"
 import { UserRepositoryImpl } from "../../../model/repositories/user/user_repo"
 import { userModel } from "../../../model/mongo_models/mongoose_model"
@@ -26,9 +28,24 @@ function emailVerificationWrapper(user: User) {
 const route = express.Router()
 const baseUrl = "/t/f/auth/"
 const userController = new UserController(new UserRepositoryImpl(userModel))
+const storage = multer.diskStorage({
+    filename:(req,file,cb)=>{
+        const fileName ="profile-photo"+Date.now()
+        cb(null,file.originalname)
+    },
+})
+const upload = multer({
+    dest:path.join(__dirname),
+    //fileFilter:userController.fileValidation,
+   /* limits:{
+        fileSize:5 * 1024 * 1024
+    }*/
+})
 route.post(`${baseUrl}create`, userValidationMdw, (req, res) => userController.createUser(req, res))
+route.post(`${baseUrl}upload`,upload.single("file"), (req, res,next) => userController.upload(req, res,next))
 route.post(`${baseUrl}authenticate`, (req: Request, res: Response) => userController.auth(req, res))
 route.delete(`${baseUrl}delete/:id`, (req: Request, res: Response, next: NextFunction) => userController.validateId(req, res, next), (req: Request, res: Response) => userController.createUser(req, res))
+route.get(`${baseUrl}reset_email/:userId/`, (req: Request, res: Response) => userController.sendEmailVerification(req, res,sendEmailResetWrapper))
 route.put(`${baseUrl}update`, (req: Request, res: Response, next) => userController.validateUser(req, res, next), (req, res) => userController.update(req, res))
 route.get(`${baseUrl}refresh/:refreshToken`, (req: Request, res: Response) => userController.refreshToken(req, res))
 route.get(`${baseUrl}send_email_verification/:userId`, (req: Request, res: Response) => userController.sendEmailVerification(req, res, emailVerificationWrapper))

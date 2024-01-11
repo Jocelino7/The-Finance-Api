@@ -2,7 +2,8 @@ import { Request, NextFunction, Response } from "express";
 import jsonwebtoken from "jsonwebtoken"
 
 export async function verifyToken(req: Request, res: Response, next: NextFunction) {
-    try {
+    next()
+   /* try {
         const jwt = jsonwebtoken
         const token = req.headers["authorization"]
         const ACESS_TOKEN = process.env.ACCESS_TOKEN_SECRET!
@@ -16,5 +17,5 @@ export async function verifyToken(req: Request, res: Response, next: NextFunctio
         console.error(e)
         res.status(403).json({ message: "forbidden" })
         return
-    }
+    }*/
 }

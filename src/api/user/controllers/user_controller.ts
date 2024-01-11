@@ -4,6 +4,11 @@ import { UserRepository } from "../../../model/repositories/user/user_repo";
 import { userYupSchema } from "../../../model/schemas/schema_validation_yup/schema_validation";
 import { generateToken, generateteRefreshToken } from "../../../utils/helpers";
 import { User } from "../../../model/dtos/dto";
+import path from "path"
+import fs from "fs"
+import AWS from "aws-sdk"
+import { internalServerError } from "../../../utils/constants";
+import { PutObjectRequest } from "aws-sdk/clients/s3";
 
 export class UserController {
     private secretRefreshToken = process.env.REFRESH_TOKEN_SECRET!
@@ -119,7 +124,7 @@ export class UserController {
             res.sendStatus(500)
         }
         catch (e: any) {
-            console.error(e)
+            console.error("erro"+e)
             res.sendStatus(500)
         }
     }
@@ -143,5 +148,63 @@ export class UserController {
             return res.sendStatus(200)
         }
         res.sendStatus(400)
+    }
+    async upload(req: Request, res: Response, next: NextFunction) {
+        console.log(req.file)
+        try {
+            const dirPath = path.join(__dirname, "../../../../", "temp")
+
+            const file = req.file
+            console.log("file"+file)
+            AWS.config.update({
+                secretAccessKey: "hS5O8bLm7h9dWlvMrirnmpRjuKB83EC9BORoFu8",
+                accessKeyId: "AKIAU7W5MD5ZJKC3247H",
+                region:"us-east-1",
+            })
+            const params: PutObjectRequest = {
+                Bucket: "the-finance-bucket",
+                Key: `user-images/${file!.filename}`,
+                Body: fs.readFileSync(file!.path),
+            }
+            const s3 = new AWS.S3()
+            s3.upload(params, ((e, data) => {
+                if (!e) {
+                    console.log("loc"+data.Location)
+                    //this.removeDirectoryRecursive(dirPath)
+                    return
+                }
+                console.log("error"+e)
+            }))
+            res.status(200).json({
+                success: true,
+                url: req.file?.filename
+            })
+        }
+        catch (e: any) {
+            const errorMessage: string | null = e.message
+            console.error(e)
+            //if (errorMessage?.toLocaleLowerCase)
+            res.status(500).json({ message: internalServerError })
+        }
+    }
+    async removeDirectoryRecursive(dirPath: string) {
+        if (fs.existsSync(dirPath)) {
+            fs.readdirSync(dirPath).forEach((value, index) => {
+                const currentPath = path.join(dirPath, value)
+                if (fs.lstatSync(currentPath).isDirectory()) {
+                    return this.removeDirectoryRecursive(currentPath)
+                }
+                fs.unlinkSync(currentPath)
+            })
+        }
+    }
+    async fileValidation(req: Request, file: Express.Multer.File, cb: (error: Error | null) => void) {
+        const mimetype = file.mimetype
+        if (mimetype == "image/jpg" || mimetype == "image/png" || mimetype == "image/jpeg") {
+            cb(null)
+            return
+
+        }
+        cb(new Error("Invalid format only jpeg,jpg and png are allowed" + mimetype))
     }
 }
