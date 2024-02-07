@@ -120,6 +120,9 @@ Authentication Routes
 
     HTTP Method: GET
     Route: /t/f/auth/uploads/:filename/
+    
+How to run
+clone the repository, type "npm ci" add the enviromental variables and a database connection string to your remote database to prisma.    
 
 Additional Notes
 
@@ -128,6 +131,5 @@ Additional Notes
     The routes are secured with authentication middleware (verifyToken) to ensure only authorized users can access them.
     Some routes utilize additional middleware for request validation and caching.
     Ensure that the ./uploads/ directory contains the uploaded files and is accessible from the server for the /t/f/auth/uploads/:filename/ route to serve files correctly.
-How to run
-clone the repository, type "npm ci" add the enviromental variables and a database connection string to your remote database to prisma.
+
     
